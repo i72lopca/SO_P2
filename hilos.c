@@ -3,6 +3,8 @@
 #include <unistd.h>
 #include <stdlib.h>
 
+//hola
+
 double counter = 0;
 
 #define ITER	10
