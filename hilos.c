@@ -78,7 +78,7 @@ void *adder(void *p){ //p es el id del thread
 
 	pthread_exit((void *) to_return);
 }
-
+/*
 int max(int *v){
 	int maxval = v[0];
 	for(int i = 0; i<NHILOS; i++){
@@ -88,10 +88,19 @@ int max(int *v){
 	}
 	return maxval;
 }
-
+*/
 void pideticket(int tid){
-	Eligiendo[tid]=1;
-	Numero[tid] = 1 + max(Numero);
+	Eligiendo[tid] = 1;
+//	Numero[tid] = 1 + max(Numero);
+//	Calculo el maximo ticket, porque no funciona con funcion, TODO: tema memoria compartida¿?
+	int maxticket = Numero[0];
+	for(int i = 0; i<NHILOS; i++){
+		if(Numero[i] > maxticket){
+			maxticket = Numero[i];
+		}
+	}
+
+	Numero[tid] = 1 + maxticket;
 	Eligiendo[tid] = 0;
 	for(int j=0; j>NHILOS; j++){
 		while(Eligiendo[j]);//Si hay otro eligiendo hay que esperar
