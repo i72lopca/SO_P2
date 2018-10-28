@@ -3,15 +3,25 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-//hola
-
 double counter = 0;
 
 #define ITER	10
 #define NHILOS	7
 
-int main()
-{
+//Variables globales para el algoritmo de lamport
+int Eligiendo[NHILOS]; //Bool no existe en C
+int Numero[NHILOS]; //Aqui se guardara por que número va atendiendo la cpu
+
+//Funcion para buscar el maximo de un vector de enteros
+int max();
+
+int main(){
+//	Inicializo las varibles del algorimo de lamport
+	for(int i=0; i<NHILOS; i++){
+		Eligiendo[i] = 0;
+		Numero[0] = 0; //Para conocer los números de turno, si el hilo i vale 0 significa que no esr¡ta interesado en entrar en zona critica
+	}
+
 	pthread_t hilos[NHILOS];
 	int status, i, v[NHILOS];
 	extern double counter;
@@ -22,7 +32,7 @@ int main()
 	for (i = 0; i < NHILOS; i++){
 	v[i] = i;
 	if ((status = pthread_create(&hilos[i], NULL, adder, (void *) &i)))
-		//pthread_create(pid del hilo, atributos de los hilos, funcion que jecuta el hilo_tiene que ser void*, argumentos de la funcion)
+		//pthread_create(pid del hilo, atributos de los hilos, funcion que ejecuta el hilo_tiene que ser void*, argumentos de la funcion)
 		exit(status);
 	}
 
@@ -38,13 +48,19 @@ int main()
 	return 0;
 }
 
-void *adder(void *p)
-{
+void *adder(void *p){ //p es el id del thread
 	double l, *to_return;
 	extern double counter;
 	int *id, i;
-
 	id = (int *) p;
+
+	//Pidiendo ticket, o calculando turno (Lamport)
+	do{
+		Eligiendo[*id]=1;
+		Numero[*id] = 1 + max(Numero);
+	}
+	while(1);
+	//Ticket pedido
 
 	//Si incluyese el for en la zona critica cada hilo se ejecutaria de uno en uno
 	for (i = 0; i < ITER; i++) {
@@ -59,4 +75,14 @@ void *adder(void *p)
 	*to_return = counter;
 
 	pthread_exit((void *) to_return);
+}
+
+int max(int *v){
+	int maxval = v[0];
+	for(int i = 0; i<NHILOS; i++){
+		if(v[i] > maxval){
+			maxval = v[i];
+		}
+	}
+	return maxval;
 }
