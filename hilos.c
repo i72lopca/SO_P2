@@ -1,3 +1,7 @@
+/*
+Enlace de la wikipedia del algoritmo de Lamport:
+https://es.wikipedia.org/wiki/Algoritmo_de_la_panader%C3%ADa_de_Lamport
+*/
 #include <pthread.h>
 #include <stdio.h>
 #include <unistd.h>
@@ -9,11 +13,13 @@ double counter = 0;
 #define NHILOS	7
 
 //Variables globales para el algoritmo de lamport
-int Eligiendo[NHILOS]; //Bool no existe en C
+int Eligiendo[NHILOS]; //Controla que solo uno elija a la misma vez ,bool no existe en C
 int Numero[NHILOS]; //Aqui se guardara por que número va atendiendo la cpu
 
 //Funcion para buscar el maximo de un vector de enteros
+void *adder();
 int max();
+void pideticket();
 
 int main(){
 //	Inicializo las varibles del algorimo de lamport
@@ -55,11 +61,7 @@ void *adder(void *p){ //p es el id del thread
 	id = (int *) p;
 
 	//Pidiendo ticket, o calculando turno (Lamport)
-	do{
-		Eligiendo[*id]=1;
-		Numero[*id] = 1 + max(Numero);
-	}
-	while(1);
+	pideticket(*id);
 	//Ticket pedido
 
 	//Si incluyese el for en la zona critica cada hilo se ejecutaria de uno en uno
@@ -85,4 +87,17 @@ int max(int *v){
 		}
 	}
 	return maxval;
+}
+
+void pideticket(int tid){
+	Eligiendo[tid]=1;
+	Numero[tid] = 1 + max(Numero);
+	Eligiendo[tid] = 0;
+	for(int j=0; j>NHILOS; j++){
+		while(Eligiendo[j]);//Si hay otro eligiendo hay que esperar
+		/*Si el hilo j tiene mas prioridad, espera que su numero se ponga a cero, j tiene mas prioridad si
+		su numero de turno es mas bajo que el de tid(para el que se esta pidiendo el ticket), o bien si es
+		el mismo numero y ademas j es meno que tid*/
+		while(Numero[j] != 0 && ((Numero[j]<Numero[tid]) || ((Numero[j]) == Numero[tid] && j<tid)));
+	}
 }
