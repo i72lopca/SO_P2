@@ -60,16 +60,16 @@ void *adder(void *p){ //p es el id del thread
 	int *id, i;
 	id = (int *) p;
 
-	//Pidiendo ticket, o calculando turno (Lamport)
-	pideticket(*id);
-	//Ticket pedido
-
 	//Si incluyese el for en la zona critica cada hilo se ejecutaria de uno en uno
 	for (i = 0; i < ITER; i++) {
-	l = counter;
-	fprintf(stdout, "Hilo %d: %f\n", *id, counter);
-	l++;
-	counter = l;
+		pideticket(*id); //Inicio de la zona critica, pido un ticket
+
+		l = counter;
+		fprintf(stdout, "Hilo %d: %f\n", *id, counter);
+		l++;
+		counter = l;
+
+		Numero[*id] = 0;//Fin de la seccion critica, elimino el ticket
 	}
 
 	to_return = malloc(sizeof(double));
