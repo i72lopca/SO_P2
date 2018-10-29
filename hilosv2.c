@@ -60,7 +60,7 @@ void *adder(void *p)
 		pideticket(*id); //Inicio de la zona critica, pido un ticket
 		
 		l = counter;
-		fprintf(stdout, "Hilo %d: %f\n", *id, counter);
+//		fprintf(stdout, "Hilo %d: %f\n", *id, counter);
 		l++;
 		counter = l;
 		
@@ -85,14 +85,16 @@ int max(int *v){
 }
 
 void pideticket(int tid){
-	Eligiendo[tid] = 1;
-	Numero[tid] = 1 + max(Numero);
-	Eligiendo[tid] = 0;
-	for(int j=0; j>NHILOS; j++){
-		while(Eligiendo[j]);//Si hay otro eligiendo hay que esperar
-		/*Si el hilo j tiene mas prioridad, espera que su numero se ponga a cero, j tiene mas prioridad si
-		su numero de turno es mas bajo que el de tid(para el que se esta pidiendo el ticket), o bien si es
-		el mismo numero y ademas j es meno que tid*/
-		while(Numero[j] != 0 && ((Numero[j]<Numero[tid]) || ((Numero[j]) == Numero[tid] && j<tid)));
+	for(int i = 0; i<NHILOS; i++){
+		Eligiendo[tid] = 1;
+		Numero[tid] = 1 + max(Numero);
+		Eligiendo[tid] = 0;
+		for(int j=0; j>NHILOS; j++){
+			while(Eligiendo[j]);//Si hay otro eligiendo hay que esperar
+			/*Si el hilo j tiene mas prioridad, espera que su numero se ponga a cero, j tiene mas prioridad si
+			su numero de turno es mas bajo que el de tid(para el que se esta pidiendo el ticket), o bien si es
+			el mismo numero y ademas j es meno que tid*/
+			while(Numero[j] != 0 && ((Numero[j]<Numero[tid]) || ((Numero[j]) == Numero[tid] && j<tid)));
+		}
 	}
 }
