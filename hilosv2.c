@@ -6,7 +6,7 @@
 double counter = 0;
 
 #define ITER    1000
-#define NHILOS  3
+#define NHILOS  7
 
 //Variables globales para el algoritmo de lamport
 int Eligiendo[NHILOS]; //Controla que solo uno elija a la misma vez ,bool no existe en C
