@@ -46,15 +46,16 @@ void vermatriz(int m[sz][sz]){
 	}
 }
 
-void *multiplica(int *hilo){
+void *multiplica(void *thread){
+	int *hilo = (int *)thread;
 	extern int m[sz][sz];
 	extern int v[sz];
 
-	int aux[sz];
-	int *res=(int*)malloc(sizeof(int));
+	int *res=(int*)calloc(sizeof(int)); //Esta memoria hay que liberarla en el main despues de usarla en el pthread_join()
 
 	for(int i=0; i<sz; i++){
-		aux[i] = m[*hilo][i] + v[i];
+		(*res) += (m[*hilo][i] + v[i]);
 	}
 
+	pthread_exit((void*) res);
 }
