@@ -13,11 +13,11 @@ void vermatriz();
 
 int main(){
 	extern int m[sz][sz];
-	extern int v[sz]
+	extern int v[sz];
 
 	srand(time(NULL));
 	rellenamatriz(m);
-	printf("La matriz szxsz es:\n");
+	printf("La matriz 3x3 es:\n");
 	vermatriz(m);
 
 
@@ -44,4 +44,17 @@ void vermatriz(int m[sz][sz]){
 		}
 		printf("\n");
 	}
+}
+
+void *multiplica(int *hilo){
+	extern int m[sz][sz];
+	extern int v[sz];
+
+	int aux[sz];
+	int *res=(int*)malloc(sizeof(int));
+
+	for(int i=0; i<sz; i++){
+		aux[i] = m[*hilo][i] + v[i];
+	}
+
 }
