@@ -10,8 +10,15 @@ void *productor(void *thread);
 void *consumidor(void *thread);
 
 int bufer[NHILOS];
+sem_t mutex, full, empty; //Declaro los semaforos necesarios para el algoritmo productor-consumidor
+
 
 int main(){
+//	inicializo los semaforos
+	sem_init(mutex, 0, 1);
+	sem_init(full, 0);  
+	sem_init(0, empty, NHILOS*2);
+
 	srand(time(NULL));
 	int v[NHILOS];
 	pthread_t idProd[NHILOS], idCon[NHILOS];
@@ -28,9 +35,6 @@ int main(){
 		pthread_join(idProd[i], NULL);
 		pthread_join(idCon[i], NULL);
 	}
-	
-	
-	
 	return 0;
 }
 
@@ -38,8 +42,19 @@ void *productor(void *thread){
 	int *hilo;
 	hilo = (int *)thread;
 	extern int bufer[NHILOS];
-	bufer[*hilo] = rand()%MAX;
-	printf("El valor del producido por %i es: %i\n", *hilo, bufer[*hilo]);
+	extern sem_t mutex, full, empty;
+
+	for(int i=0; i<500; i++){
+//		Produzco el dato
+		bufer[*hilo] = rand()%MAX;
+		printf("El valor del producido por %i es: %i\n", *hilo, bufer[*hilo]);
+		wait(empty);
+		wait(mutex);
+//		Introduzco el dato
+		signal(mutex);
+		signal(full);
+
+	}
 	pthread_exit(NULL);
 }
 
@@ -47,6 +62,7 @@ void *consumidor(void *thread){
 	int *hilo;
 	hilo = (int *)thread;
 	extern int bufer[NHILOS];
+	
 	printf("El valor del consumido por %i es: %i\n", *hilo, bufer[*hilo]);
 	pthread_exit(NULL);
 
