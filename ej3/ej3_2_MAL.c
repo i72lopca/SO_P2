@@ -81,7 +81,9 @@ void *consumidor(){
 	extern sem_t mutex, full, empty;
 	extern int sumC, itC;
 
-/*	Con este bucle no funciona
+/*	Con este bucle no funciona, creo que porque una vez se evalua la condicion y se pasar puede cambiar
+	itC y ya no pasar la condicion, pero al ya estar dentro del while se ejecuta el codigo, mejor no hacer condiciones
+	con variables compartidas
 	while(itC<Nprod){
 		sem_wait(&full);
 		sem_wait(&mutex);
