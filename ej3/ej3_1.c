@@ -4,7 +4,7 @@
 #include <semaphore.h>
 
 #define TAMBUF 10 //Tamaño del vector buffer
-#define Nprod 200 //Numero de elementos que se producirary consumiran
+#define Nprod 200 //Numero de elementos que se produciraran y consumiran
 
 void *productor();
 void *consumidor();

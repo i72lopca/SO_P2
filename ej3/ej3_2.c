@@ -6,7 +6,7 @@
 #define NPROD 5
 #define NCONS 5
 #define TAMBUF 10
-#define Nprod 20
+#define Nprod 20 //Numero de productos que se pruduciran y se consumiran por cada hilo
 
 void *productor();
 void *consumidor();
@@ -50,18 +50,6 @@ void *productor(){
 	extern sem_t mutex, full, empty;
 	extern int sumP, itP;
 	int val;
-/*	
-	while(itP<Nprod){
-		val = rand()%1001;
-		sem_wait(&empty);
-		sem_wait(&mutex);
-		bufer[itP%TAMBUF] = val;
-		sumP += val;
-		itP++;
-		sem_post(&mutex);
-		sem_post(&full);
-	}
-*/
 
 	for(int i=0; i<Nprod; i++){
 		val = rand()%1001;
@@ -80,17 +68,7 @@ void *consumidor(){
 	extern int bufer[TAMBUF];
 	extern sem_t mutex, full, empty;
 	extern int sumC, itC;
-/*
-	while(itC<Nprod){
-		sem_wait(&full);
-		sem_wait(&mutex);
-		sumC += bufer[itC%TAMBUF];
-		bufer[itC%TAMBUF] = 0;
-		itC++;
-		sem_post(&mutex);
-		sem_post(&empty);
-	}
-*/
+
 	for(int i=0; i<Nprod; i++){
 		sem_wait(&full);
 		sem_wait(&mutex);
