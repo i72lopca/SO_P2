@@ -63,7 +63,7 @@ void *productor(){
 	}
 */
 
-	for(int i=0; i<Nprod; i++){
+	for(int i=0; i<Nprod; i++){//Si quisiera controlar el numero de productos total usaria i<(Nprod / NPROD)
 		val = rand()%1001;
 		sem_wait(&empty);
 		sem_wait(&mutex);
@@ -92,7 +92,7 @@ void *consumidor(){
 		sem_post(&empty);
 	}
 */
-	for(int i=0; i<Nprod; i++){//Si quisiera controlar el numero de productos total usaria i<(Nprod / NCONS)
+	for(int i=0; i<Nprod; i++){
 		sem_wait(&full);
 		sem_wait(&mutex);
 		sumC += bufer[itC%TAMBUF];
