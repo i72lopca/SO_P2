@@ -4,9 +4,9 @@
 #include <semaphore.h>
 
 #define NPROD 5
-#define NCONS 10
+#define NCONS 5
 #define TAMBUF 10
-#define Nprod 20 //Numero de productos que se pruduciran y se consumiran
+#define Nprod 20 //Numero de productos que se pruduciran y se consumiran por cada hilo
 
 void *productor();
 void *consumidor();
@@ -51,7 +51,7 @@ void *productor(){
 	extern int sumP, itP;
 	int val;
 
-	for(int i=0; i<(Nprod / NPROD); i++){
+	for(int i=0; i<Nprod; i++){
 		val = rand()%1001;
 		sem_wait(&empty);
 		sem_wait(&mutex);
@@ -69,7 +69,7 @@ void *consumidor(){
 	extern sem_t mutex, full, empty;
 	extern int sumC, itC;
 
-	for(int i=0; i<(Nprod / NCONS); i++){
+	for(int i=0; i<Nprod; i++){
 		sem_wait(&full);
 		sem_wait(&mutex);
 		sumC += bufer[itC%TAMBUF];
