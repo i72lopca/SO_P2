@@ -143,7 +143,9 @@ Como usuario quiero que los datos se almacenados se puedan cargar en el sistema.
 
 # (REVERSO)
 
-* Quiero que los datos almacenados se carguen de forma automática en el sistema.# (ANVERSO)
+* Quiero que los datos almacenados se carguen de forma automática en el sistema.
+
+# (ANVERSO)
 **ID:** *11*  **Guardar_Almacenamiento**
 
 Como usuario quiero que los datos del sistema se almacenen de forma permanente.
